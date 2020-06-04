@@ -9,3 +9,6 @@
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 gravity_scale = 7.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
