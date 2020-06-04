@@ -10,32 +10,25 @@
 [sub_resource type="GDScript" id=3]
 script/source = "extends RigidBody2D
 
-export var HORIZONTAL_SPEED = 200
+export var HORIZONTAL_SPEED = 300
 export var JUMP_SPEED = 500
 
 
 func _physics_process(delta):
 	var linear_velocity = get_linear_velocity()
-
-	if Input.is_action_pressed(\"ui_left\"):
-		set_linear_velocity(Vector2(-HORIZONTAL_SPEED, linear_velocity.y))
-	elif Input.is_action_pressed(\"ui_right\"):
-		set_linear_velocity(Vector2(HORIZONTAL_SPEED, linear_velocity.y))
+	var horizontal_strength = (Input.get_action_strength(\"ui_right\") - Input.get_action_strength(\"ui_left\")) \\
+		* HORIZONTAL_SPEED
+	set_linear_velocity(Vector2(horizontal_strength, linear_velocity.y))
 
 	if linear_velocity.y < 0:
 		$AnimatedSprite.play(\"jump\")
 	else:
 		$AnimatedSprite.play(\"fall\")
 
-	var facing = 0
-
 	if linear_velocity.x > 0:
-		facing = 0.5
+		$AnimatedSprite.set_flip_h(false)
 	elif linear_velocity.x < 0:
-		facing = -0.5
-
-	if facing != 0:
-		$AnimatedSprite.scale.x = facing
+		$AnimatedSprite.set_flip_h(true)
 
 
 func _on_Area2D_body_entered(body):
@@ -73,7 +66,7 @@ position = Vector2( 0, -36 )
 scale = Vector2( 0.5, 0.5 )
 frames = SubResource( 1 )
 animation = "idle"
-frame = 2
+frame = 1
 playing = true
 
 [node name="Area2D" type="Area2D" parent="."]
