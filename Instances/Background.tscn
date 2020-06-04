@@ -35,4 +35,4 @@ motion_mirroring = Vector2( 512, 768 )
 [node name="Sprite" type="Sprite" parent="ParallaxLayer"]
 texture = SubResource( 3 )
 region_enabled = true
-region_rect = Rect2( 0, 0, 512, 768 )
+region_rect = Rect2( 0, 0, 512, 1536 )

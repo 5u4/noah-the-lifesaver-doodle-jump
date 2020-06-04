@@ -1,18 +1,72 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Instances/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Instances/Background.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Instances/Paddle.tscn" type="PackedScene" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Camera2D
+
+export(NodePath) var player_path
+
+var player: RigidBody2D
+
+
+func _ready():
+	player = get_node(player_path)
+
+
+func _process(delta):
+	var player_y = player.position.y
+	if player_y < get_camera_position().y:
+		self.position = Vector2(0, player_y)
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Node2D
+
+
+export var GOAL = 3000
+export var MIN_PADDLE_DISTANCE = 40
+export var MAX_PADDLE_DISTANCE = 120
+export var DIFFICULTY_INCREASE_LEVEL = 2
+export var DIFFICULTY_MULTIPLIER = 2
+
+
+var paddle_instance = preload(\"res://Instances/Paddle.tscn\")
+
+
+func _ready():
+	var width = get_viewport().get_visible_rect().size.x
+	randomize()
+
+	var y = 0
+	var difficulty = 0
+	while y < GOAL:
+		var paddle = paddle_instance.instance()
+		paddle.position = Vector2(rand_range(-width / 3, width / 3), -y);
+		var min_range = min(MIN_PADDLE_DISTANCE + difficulty, MAX_PADDLE_DISTANCE)
+		var max_range = min(MIN_PADDLE_DISTANCE + difficulty * DIFFICULTY_MULTIPLIER, MAX_PADDLE_DISTANCE)
+		y += rand_range(MIN_PADDLE_DISTANCE + difficulty, max_range)
+		difficulty += DIFFICULTY_INCREASE_LEVEL
+		add_child(paddle)
+"
 
 [node name="World" type="Node2D"]
 
 [node name="ParallaxBackground" parent="." instance=ExtResource( 2 )]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
+z_index = 1
 gravity_scale = 7.0
+
+[node name="Paddle" parent="." instance=ExtResource( 3 )]
+position = Vector2( 0, 148 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
+script = SubResource( 1 )
+player_path = NodePath("../Player")
 
-[node name="Paddle" parent="." instance=ExtResource( 3 )]
-position = Vector2( 0.447632, 256.532 )
+[node name="PaddleGenerator" type="Node2D" parent="."]
+script = SubResource( 2 )
