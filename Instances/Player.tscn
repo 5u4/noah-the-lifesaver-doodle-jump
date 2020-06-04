@@ -15,10 +15,27 @@ export var JUMP_SPEED = 500
 
 
 func _physics_process(delta):
+	var linear_velocity = get_linear_velocity()
+
 	if Input.is_action_pressed(\"ui_left\"):
-		set_linear_velocity(Vector2(-HORIZONTAL_SPEED, get_linear_velocity().y))
+		set_linear_velocity(Vector2(-HORIZONTAL_SPEED, linear_velocity.y))
 	elif Input.is_action_pressed(\"ui_right\"):
-		set_linear_velocity(Vector2(HORIZONTAL_SPEED, get_linear_velocity().y))
+		set_linear_velocity(Vector2(HORIZONTAL_SPEED, linear_velocity.y))
+
+	if linear_velocity.y < 0:
+		$AnimatedSprite.play(\"jump\")
+	else:
+		$AnimatedSprite.play(\"fall\")
+
+	var facing = 0
+
+	if linear_velocity.x > 0:
+		facing = 0.5
+	elif linear_velocity.x < 0:
+		facing = -0.5
+
+	if facing != 0:
+		$AnimatedSprite.scale.x = facing
 
 
 func _on_Area2D_body_entered(body):
@@ -33,14 +50,14 @@ animations = [ {
 "name": "idle",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "fall",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 1 ) ],
 "loop": true,
 "name": "jump",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 6 ) ],
-"loop": true,
-"name": "land",
 "speed": 5.0
 } ]
 
@@ -56,7 +73,7 @@ position = Vector2( 0, -36 )
 scale = Vector2( 0.5, 0.5 )
 frames = SubResource( 1 )
 animation = "idle"
-frame = 3
+frame = 2
 playing = true
 
 [node name="Area2D" type="Area2D" parent="."]
