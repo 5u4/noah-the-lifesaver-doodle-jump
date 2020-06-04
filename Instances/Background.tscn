@@ -6,7 +6,7 @@ script/source = "extends ParallaxBackground
 export var x = 0
 export var y = 10
 
-var velocity = Vector2(x, y)
+onready var velocity = Vector2(x, y)
 
 
 func _process(delta):
