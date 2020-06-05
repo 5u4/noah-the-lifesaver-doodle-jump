@@ -1,6 +1,6 @@
-<p align="center"><img src="./web/assets/Banner.gif" /></p>
+<p align="center"><img src="./Assets/Web/Banner.gif" /></p>
 
-![game play](./web/assets/gameplay.gif)
+![game play](./Assets/Web/gameplay.gif)
 
 ## Reference
 
