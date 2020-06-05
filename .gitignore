@@ -8,6 +8,7 @@ dist
 .import/
 export.cfg
 export_presets.cfg
+/public/**/*.import
 
 # Mono-specific ignores
 .mono/
