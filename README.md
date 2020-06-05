@@ -1,4 +1,4 @@
-<p align="center"><img src="./public/assets/Banner.gif" /></p>
+<p align="center"><img src="./public/assets/header.gif" /></p>
 
 ![game play](./public/assets/gameplay.gif)
 
